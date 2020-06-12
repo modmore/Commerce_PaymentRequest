@@ -107,6 +107,9 @@ $modulePath = $componentPath . '/core/components/commerce_paymentrequest/src/Mod
 // Instruct Commerce to load modules from our directory, providing the base namespace and module path twice
 $commerce->loadModulesFromDirectory($modulePath, 'modmore\\Commerce_PaymentRequest\\Modules\\', $modulePath);
 
+$mgr = $modx->getManager();
+$mgr->createObjectContainer('prPaymentRequest');
+
 // Clear the cache
 $modx->cacheManager->refresh();
 

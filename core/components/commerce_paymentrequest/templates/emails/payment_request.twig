@@ -1,0 +1,7 @@
+{% extends "emails/message.twig" %}
+
+{% block message_content %}
+    <p>{{ payment_request.note|nl2br }}</p>
+
+    <p><a href="{{ payment_request.link }}">{{ lex('commerce_paymentrequest.link_text', payment_request) }}</a> </p>
+{% endblock %}

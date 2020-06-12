@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model package="commerce_paymentrequest" baseClass="comSimpleObject" platform="mysql" defaultEngine="InnoDB" version="1.1">
+    <object class="prPaymentRequest" table="commerce_paymentrequest_req" extends="comSimpleObject">
+        <field key="reference" dbtype="varchar" precision="191" phptype="string" null="false" default="" />
+        <field key="order" dbtype="int" precision="10" phptype="integer" null="false" default="0" />
+        <field key="status" dbtype="varchar" precision="10" phptype="string" null="false" default="new" />
+        <field key="currency" dbtype="varchar" precision="3" phptype="string" null="false" default="" />
+        <field key="amount" formatter="financial" dbtype="int" precision="20" phptype="integer" null="false" default="0" />
+        <field key="note" dbtype="text" phptype="string" null="true" default="" />
+
+        <field key="created_on" formatter="datetime" dbtype="int" precision="20" phptype="int" null="false" default="0" />
+        <field key="completed_on" formatter="datetime" dbtype="int" precision="20" phptype="int" null="false" default="0" />
+        <field key="transaction" dbtype="int" precision="10" phptype="integer" null="false" default="0" />
+
+        <aggregate alias="Order" class="comOrder" local="order" foreign="id" cardinality="one" owner="foreign" />
+        <aggregate alias="Transaction" class="comTransaction" local="transaction" foreign="id" cardinality="one" owner="foreign" />
+
+        <index alias="reference" name="reference" primary="false" unique="false" type="BTREE">
+            <column key="reference" length="" collation="A" null="false" />
+        </index>
+        <index alias="order" name="order" primary="false" unique="false" type="BTREE">
+            <column key="order" length="" collation="A" null="false" />
+        </index>
+        <index alias="status" name="status" primary="false" unique="false" type="BTREE">
+            <column key="status" length="" collation="A" null="false" />
+        </index>
+        <index alias="transaction" name="transaction" primary="false" unique="false" type="BTREE">
+            <column key="transaction" length="" collation="A" null="false" />
+        </index>
+    </object>
+</model>
