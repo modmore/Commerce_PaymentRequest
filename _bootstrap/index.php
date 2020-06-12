@@ -90,6 +90,15 @@ foreach ($settings as $key => $opts) {
 }
 
 
+
+if (!createObject('modSnippet', array(
+    'name' => 'commerce_paymentrequest',
+    'static' => true,
+    'static_file' => $componentPath.'/core/components/commerce_paymentrequest/elements/snippets/paymentrequest.snippet.php',
+), 'name', true)) {
+    echo "Error creating commerce_paymentrequest snippet.\n";
+}
+
 $path = $modx->getOption('commerce.core_path', null, MODX_CORE_PATH . 'components/commerce/') . 'model/commerce/';
 $params = ['mode' => $modx->getOption('commerce.mode')];
 /** @var Commerce|null $commerce */
