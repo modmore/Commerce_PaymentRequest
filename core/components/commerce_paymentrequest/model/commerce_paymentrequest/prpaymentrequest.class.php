@@ -103,4 +103,10 @@ TWIG
         return $fields;
     }
 
+    public function getTransaction()
+    {
+        return $this->adapter->getObject('comTransaction', [
+            'id' => $this->get('transaction')
+        ]);
+    }
 }
