@@ -58,7 +58,7 @@ class PaymentRequest extends BaseModule {
         if ($page->key === 'order') {
             /** @var Overview $page */
             $requests = new SimpleSection($this->commerce, [
-                'title' => 'Payment Requests'
+                'title' => $this->adapter->lexicon('commerce_paymentrequests.title')
             ]);
             $requests->priority = 24; // before the transactionsection with priority 25
             $requests->addWidget((new Grid($this->commerce, [

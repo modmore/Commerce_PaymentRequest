@@ -42,6 +42,7 @@ class Grid extends GridWidget {
             new Column('created_on', $this->adapter->lexicon('commerce.created_on'), true),
             new Column('amount_formatted', $this->adapter->lexicon('commerce.amount'), false),
             new Column('status', $this->adapter->lexicon('commerce.status'), true),
+            new Column('transaction', $this->adapter->lexicon('commerce.transaction'), false, true),
             new Column('completed_on', $this->adapter->lexicon('commerce.completed_on'), true, true),
         ];
     }
@@ -82,6 +83,15 @@ class Grid extends GridWidget {
 
         $item['created_on'] = date('Y-m-d H:i:s', $item['created_on']);
         $item['completed_on'] = $item['completed_on'] > 0 ? date('Y-m-d H:i:s', $item['completed_on']) : '&mdash;';
+
+        if ($transaction = $request->getTransaction()) {
+            $item['transaction'] = $transaction->get('reference') ?? '#' . $transaction->get('id');
+            $item['transaction'] = '<a href="' . $this->adapter->makeAdminUrl('transaction', ['id' => $transaction->get('id')]) . '" class="commerce-ajax-modal">' . $this->encode($item['transaction']) . '</a>';
+            $item['transaction'] .= ' (' . $this->adapter->lexicon('commerce.transaction_status.' . $transaction->get('status')) .')';
+        }
+        else {
+            $item['transaction'] = $this->adapter->lexicon('commerce_paymentrequest.transaction_waiting');
+        }
 
         $item['actions'] = [];
 
