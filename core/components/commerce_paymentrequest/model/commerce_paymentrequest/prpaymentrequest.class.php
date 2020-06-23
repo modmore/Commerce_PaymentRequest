@@ -96,7 +96,8 @@ TWIG
                 '',
                 [
                     'ref' => $this->get('reference')
-                ]
+                ],
+                'full'
             );
         }
 
