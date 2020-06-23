@@ -4,10 +4,9 @@
  * @var array $scriptProperties
  */
 
-
-// Instantiate the Commerce class
 use modmore\Commerce\Gateways\Interfaces\RedirectTransactionInterface;
 
+// Instantiate the Commerce class
 $path = $modx->getOption('commerce.core_path', null, MODX_CORE_PATH . 'components/commerce/') . 'model/commerce/';
 $params = ['mode' => $modx->getOption('commerce.mode')];
 /** @var Commerce|null $commerce */
@@ -117,7 +116,7 @@ if ($result->isPaid()) {
         $request->save();
     }
 
-    return '<p class="success">Bedankt, we hebben uw betaling ontvangen.</p>';
+    return $modx->getOption('messageSuccess', $scriptProperties, '<p class="success">Bedankt, we hebben uw betaling ontvangen.</p>');
 }
 
 if ($newAttempt && $result instanceof RedirectTransactionInterface && $result->isRedirect()) {
@@ -146,7 +145,9 @@ if ($result->isAwaitingConfirmation()) {
 
     $transaction->log('Transaction still awaiting confirmation; showing customer the transaction is pending', comTransactionLog::SOURCE_CHECKOUT);
 
-    return '<p>Uw betaling is gestart, maar nog niet voltooid of verwerkt. Afhankelijk van de gekozen betaalmethode kan dit enkele minuten tot enkele dagen duren. <a href="' . $transaction->getProperty('redirectUrl') . '">Probeer het opnieuw</a></p>';
+    $message = $modx->getOption('messageWaitingConfirmation', $scriptProperties, '<p>Uw betaling is gestart, maar nog niet voltooid of verwerkt. Afhankelijk van de gekozen betaalmethode kan dit enkele minuten tot enkele dagen duren. <a href="%link%">Probeer het opnieuw</a></p>');
+    $message = str_replace('%link%', $transaction->getProperty('redirectUrl'), $message);
+    return $message;
 }
 
 // Was it cancelled? Mark transaction as such.
@@ -163,7 +164,8 @@ if ($result->isCancelled()) {
     $request->set('transaction', 0);
     $request->save();
 
-    return '<p>De betaling is geannuleerd. <a href="' . $selfLink . '">Probeer het opnieuw</a>';
+    $message = $modx->getOption('messageCancelled', $scriptProperties, '<p>De betaling is geannuleerd. <a href="%link%">Probeer het opnieuw</a></p>');
+    return str_replace('%link%', $selfLink, $message);
 }
 
 // Failed? Mark transaction as such.
@@ -184,7 +186,8 @@ if ($result->isFailed()) {
     $request->set('transaction', 0);
     $request->save();
 
-    return '<p>' . $commerce->adapter->lexicon($errorKey, ['name' => $method->get('name'), 'message' => $result->getErrorMessage()]) . '</p> <a href="' . $selfLink . '">Probeer het opnieuw</a>';
+    $message = $modx->getOption('messageFailed', $scriptProperties, '<p>' . $commerce->adapter->lexicon($errorKey, ['name' => $method->get('name'), 'message' => $result->getErrorMessage()]) . ' <a href="%link%">Probeer het opnieuw</a></p>');
+    return str_replace('%link%', $selfLink, $message);
 }
 
 
