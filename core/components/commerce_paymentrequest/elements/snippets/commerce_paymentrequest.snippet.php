@@ -4,6 +4,7 @@
  * @var array $scriptProperties
  */
 
+use modmore\Commerce\Gateways\Exceptions\TransactionException;
 use modmore\Commerce\Gateways\Interfaces\RedirectTransactionInterface;
 
 // Instantiate the Commerce class
@@ -77,9 +78,18 @@ if (!$gateway) {
     return '<p class="error">Could not load the payment gateway. Please contact customer support.</p>';
 }
 
+$selfLink = $commerce->adapter->makeResourceUrl($modx->resource->get('id'), '', ['ref' => $ref], 'full');
 // Use the gateway to create the transaction
-$result = $newAttempt ? $gateway->submit($transaction, []) : $gateway->returned($transaction, []);
-$selfLink = $modx->makeUrl($modx->resource->get('id'), '', ['ref' => $ref], 'full');
+try {
+    $result = $newAttempt ? $gateway->submit($transaction, []) : $gateway->returned($transaction, []);
+}
+catch (TransactionException $e) {
+    $request->set('transaction', 0);
+    $request->save();
+    $errorKey = $newAttempt ? 'commerce.error_creating_transaction' : 'commerce.error_verifying_transaction';
+    $message = $modx->getOption('messageFailed', $scriptProperties, '<p>' . $commerce->adapter->lexicon($errorKey, ['name' => $method->get('name'), 'message' => $e->getMessage()]) . ' <a href="%link%">Probeer het opnieuw</a></p>');
+    return str_replace('%link%', $selfLink, $message);
+}
 
 // Store the reference if we have it
 if ($reference = $result->getPaymentReference()) {
