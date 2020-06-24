@@ -94,7 +94,7 @@ foreach ($settings as $key => $opts) {
 if (!createObject('modSnippet', array(
     'name' => 'commerce_paymentrequest',
     'static' => true,
-    'static_file' => $componentPath.'/core/components/commerce_paymentrequest/elements/snippets/paymentrequest.snippet.php',
+    'static_file' => $componentPath.'/core/components/commerce_paymentrequest/elements/snippets/commerce_paymentrequest.snippet.php',
 ), 'name', true)) {
     echo "Error creating commerce_paymentrequest snippet.\n";
 }
