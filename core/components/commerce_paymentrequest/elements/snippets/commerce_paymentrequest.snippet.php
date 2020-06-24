@@ -124,6 +124,7 @@ if ($result->isPaid()) {
         $request->set('status', prPaymentRequest::STATUS_COMPLETED);
         $request->set('completed_on', time());
         $request->save();
+        $request->sendCompleted();
     }
 
     return $modx->getOption('messageSuccess', $scriptProperties, '<p class="success">Bedankt, we hebben uw betaling ontvangen.</p>');

@@ -1,3 +1,9 @@
+Payment Request for Commerce 1.1.0-pl
+-------------------------------------
+Released on 2020-06-24
+
+- Add email to merchant (configured with commerce_paymentrequest.email_on_complete system setting) when a payment request is paid.
+
 Payment Request for Commerce 1.0.0-pl
 -------------------------------------
 Released on 2020-06-23

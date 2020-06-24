@@ -8,6 +8,8 @@ $_lang['commerce_paymentrequest.note'] = 'Customer note';
 $_lang['commerce_paymentrequest.note.desc'] = 'The customer will be sent an email with the payment request. It\'s recommended to include a custom note here to explain the customer the reason for the payment request. ';
 $_lang['commerce_paymentrequest.link_text'] = 'Pay [[+amount_formatted]]';
 $_lang['commerce_paymentrequest.subject'] = 'Payment request for order [[+order]] ([[+amount]])';
+$_lang['commerce_paymentrequest.paid_subject'] = 'Payment request paid for order [[+order]] ([[+amount]])';
+$_lang['commerce_paymentrequest.paid_message'] = 'The payment request sent on [[+sent_on]] for order [[+order]] has been paid by the customer.';
 
 $_lang['commerce_paymentrequest.status_new'] = 'New';
 $_lang['commerce_paymentrequest.status_waiting'] = 'Waiting for payment';

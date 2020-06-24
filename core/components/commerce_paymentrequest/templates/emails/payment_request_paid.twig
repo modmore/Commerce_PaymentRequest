@@ -1,0 +1,11 @@
+{% extends "emails/message.twig" %}
+
+{% block message_content %}
+    <p>{{ lex('commerce_paymentrequest.paid_message', {
+            sent_on: payment_request.created_on_formatted,
+            order: order.reference
+        }) }}
+    </p>
+
+    <p><a href="{{ config.site_url }}{{ admin_url('order', { order: order.id }) }}">{{ lex('commerce.email.order_rcvdmerch.view_order_in_manager') }}</a></p>
+{% endblock %}

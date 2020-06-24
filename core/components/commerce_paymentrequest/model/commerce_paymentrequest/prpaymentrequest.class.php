@@ -86,6 +86,40 @@ TWIG
         }
     }
 
+    public function sendCompleted(): void
+    {
+        /** @var comOrder $order */
+        $order = $this->adapter->getObject('comOrder', ['id' => $this->get('order')]);
+        if (!$order) {
+            $this->adapter->log(1, '[Commerce_PaymentRequest] Could not send confirmed payment request ' . $this->get('id') . ' because order ' . $this->get('order') . ' could not be loaded.');
+            return;
+        }
+
+        /** @var comOrderEmailMessage $msg */
+        $msg = $this->adapter->newObject('comOrderEmailMessage');
+        $msg->set('order', $this->get('order'));
+        $msg->set('content', <<<TWIG
+{% extends "emails/payment_request_paid.twig" %}
+TWIG
+        );
+        $msg->set('recipient', $this->adapter->getOption('commerce_paymentrequest.email_on_complete'));
+        $msg->set('created_on', time());
+        $msg->setProperties([
+            'subject' => $this->adapter->lexicon('commerce_paymentrequest.paid_subject', [
+                'order' => $order->get('reference'),
+                'amount' => $this->get('amount_formatted')
+            ])
+        ]);
+
+
+        // Note the associated payment request - the module inserts the placeholders into the template based on this.
+        $msg->setProperty('payment_request', $this->get('id'));
+
+        if ($msg->save()) {
+            $msg->send();
+        }
+    }
+
     public function toArray($keyPrefix = '', $rawValues = false, $excludeLazy = false, $includeRelated = false)
     {
         $fields =  parent::toArray($keyPrefix, $rawValues, $excludeLazy, $includeRelated);
