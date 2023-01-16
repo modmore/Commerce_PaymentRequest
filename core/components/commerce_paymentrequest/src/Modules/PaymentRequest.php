@@ -9,7 +9,7 @@ use modmore\Commerce\Events\MessagePlaceholders;
 use modmore\Commerce\Modules\BaseModule;
 use modmore\Commerce_PaymentRequest\Admin\Requests\Create;
 use modmore\Commerce_PaymentRequest\Admin\Requests\Grid;
-use Symfony\Component\EventDispatcher\EventDispatcher;
+use modmore\Commerce\Dispatcher\EventDispatcher;
 
 require_once dirname(__DIR__, 2) . '/vendor/autoload.php';
 
@@ -40,7 +40,7 @@ class PaymentRequest extends BaseModule {
         $root = dirname(__DIR__, 2);
         $path = $root . '/model/';
         $this->adapter->loadPackage('commerce_paymentrequest', $path);
-        
+
         $dispatcher->addListener(\Commerce::EVENT_DASHBOARD_PAGE_BEFORE_GENERATE, [$this, 'insertRequestsOnOrder']);
         $dispatcher->addListener(\Commerce::EVENT_DASHBOARD_INIT_GENERATOR, [$this, 'initGenerator']);
         $dispatcher->addListener(\Commerce::EVENT_ORDER_MESSAGE_PLACEHOLDERS, [$this, 'addPlaceholdersToEmail']);
